@@ -1,0 +1,11 @@
+{
+  "name": "@openclaw/skill-file-manager",
+  "version": "1.0.0",
+  "description": "Manage files and directories — create, copy, move, rename, delete, organize, find, and list.",
+  "main": "index.js",
+  "openclaw": {
+    "extensions": ["./index.js"]
+  },
+  "keywords": ["openclaw", "skill", "file", "manager"],
+  "license": "MIT"
+}
