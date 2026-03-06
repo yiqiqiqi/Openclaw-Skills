@@ -1,0 +1,11 @@
+{
+  "name": "@openclaw/skill-file-reader",
+  "version": "1.0.0",
+  "description": "Read, preview, and analyze files. Supports text files, code, logs, CSV, JSON, YAML, and more.",
+  "main": "index.js",
+  "openclaw": {
+    "extensions": ["./index.js"]
+  },
+  "keywords": ["openclaw", "skill", "file", "reader"],
+  "license": "MIT"
+}

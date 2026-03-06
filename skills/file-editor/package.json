@@ -1,0 +1,11 @@
+{
+  "name": "@openclaw/skill-file-editor",
+  "version": "1.0.0",
+  "description": "Edit and modify file contents — insert, replace, delete lines, append, prepend, find-and-replace, format, and refactor.",
+  "main": "index.js",
+  "openclaw": {
+    "extensions": ["./index.js"]
+  },
+  "keywords": ["openclaw", "skill", "file", "editor"],
+  "license": "MIT"
+}
