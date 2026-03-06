@@ -1,0 +1,2 @@
+# Openclaw-Skills
+privacy
