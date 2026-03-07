@@ -1,9 +1,7 @@
 {
   "id": "skill-file-reader",
   "name": "File Reader",
-  "description": "Read, preview, and analyze files. Supports text files, code, logs, CSV, JSON, YAML, and more.",
-  "version": "1.0.0",
-  "kind": "tool",
+  "description": "Read, preview, search, and compare files.",
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
