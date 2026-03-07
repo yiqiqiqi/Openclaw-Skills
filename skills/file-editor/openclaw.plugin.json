@@ -1,9 +1,7 @@
 {
   "id": "skill-file-editor",
   "name": "File Editor",
-  "description": "Edit and modify file contents — insert, replace, delete lines, append, prepend, find-and-replace, format, and refactor.",
-  "version": "1.0.0",
-  "kind": "tool",
+  "description": "Edit and modify file contents — insert, replace, delete lines, find-and-replace, and transform.",
   "configSchema": {
     "type": "object",
     "additionalProperties": false,
