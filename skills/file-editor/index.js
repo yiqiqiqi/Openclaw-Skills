@@ -2,16 +2,17 @@ const fs = require("fs");
 const path = require("path");
 
 module.exports = {
-  name: "file-editor",
+  id: "skill-file-editor",
+  name: "File Editor",
   description: "Edit and modify file contents — insert, replace, delete lines, append, prepend, find-and-replace, format, and refactor.",
 
-  tools: [
-    {
+  register(api) {
+    api.registerTool({
       name: "replace_text",
       description:
         "Find and replace text in a file. Supports single or global replacement, " +
         "with optional regex mode. Supports dry-run preview.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           filePath: { type: "string", description: "Path to the file to edit" },
@@ -23,7 +24,7 @@ module.exports = {
         },
         required: ["filePath", "search", "replace"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const { filePath, search, replace, replaceAll, useRegex, dryRun } = params;
         const resolved = path.resolve(filePath);
 
@@ -66,13 +67,13 @@ module.exports = {
           }],
         };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "insert_lines",
       description:
         "Insert text at a specific line number, after a pattern match, at the beginning, or at the end of a file.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           filePath: { type: "string", description: "Path to the file" },
@@ -87,7 +88,7 @@ module.exports = {
         },
         required: ["filePath", "content", "position"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const { filePath, content, position, lineNumber, pattern } = params;
         const resolved = path.resolve(filePath);
 
@@ -140,13 +141,13 @@ module.exports = {
           }],
         };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "delete_lines",
       description:
         "Delete specific lines from a file by line number, range, or matching pattern. Supports dry-run preview.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           filePath: { type: "string", description: "Path to the file" },
@@ -157,7 +158,7 @@ module.exports = {
         },
         required: ["filePath"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const { filePath, startLine, endLine, pattern, dryRun } = params;
         const resolved = path.resolve(filePath);
 
@@ -203,13 +204,13 @@ module.exports = {
           }],
         };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "transform_file",
       description:
         "Transform file content: convert line endings, change case, or remove trailing whitespace.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           filePath: { type: "string", description: "Path to the file" },
@@ -221,7 +222,7 @@ module.exports = {
         },
         required: ["filePath", "action"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const { filePath, action } = params;
         const resolved = path.resolve(filePath);
 
@@ -260,6 +261,6 @@ module.exports = {
         fs.writeFileSync(resolved, content, "utf-8");
         return { content: [{ type: "text", text: `${description} in ${resolved}.` }] };
       },
-    },
-  ],
+    });
+  },
 };

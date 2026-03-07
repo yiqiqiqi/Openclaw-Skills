@@ -3,16 +3,17 @@ const path = require("path");
 const { execSync } = require("child_process");
 
 module.exports = {
-  name: "file-manager",
+  id: "skill-file-manager",
+  name: "File Manager",
   description: "Manage files and directories — create, copy, move, rename, delete, organize, find, and list.",
 
-  tools: [
-    {
+  register(api) {
+    api.registerTool({
       name: "list_directory",
       description:
         "List files and directories at a given path with details (size, permissions, modification date). " +
         "Supports sorting by name, size, time, or extension.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           dirPath: {
@@ -35,7 +36,7 @@ module.exports = {
         },
         required: [],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const dir = path.resolve(params.dirPath || ".");
 
         if (!fs.existsSync(dir)) {
@@ -65,13 +66,13 @@ module.exports = {
         });
         return { content: [{ type: "text", text: `Directory: ${dir}\n\n${result}` }] };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "create_file_or_dir",
       description:
         "Create a new file (optionally with content) or directory. Creates parent directories automatically.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           targetPath: {
@@ -89,7 +90,7 @@ module.exports = {
         },
         required: ["targetPath"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const target = path.resolve(params.targetPath);
 
         if (fs.existsSync(target)) {
@@ -105,12 +106,12 @@ module.exports = {
         fs.writeFileSync(target, params.content || "", "utf-8");
         return { content: [{ type: "text", text: `File created: ${target}` }] };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "copy_file",
       description: "Copy a file or directory to a new location. Warns if the destination already exists.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           source: { type: "string", description: "Source path" },
@@ -118,7 +119,7 @@ module.exports = {
         },
         required: ["source", "destination"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const src = path.resolve(params.source);
         const dst = path.resolve(params.destination);
 
@@ -138,12 +139,12 @@ module.exports = {
         );
         return { content: [{ type: "text", text: `Copied ${src} → ${dst}` }] };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "move_file",
       description: "Move or rename a file or directory. Warns if the destination already exists.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           source: { type: "string", description: "Source path" },
@@ -151,7 +152,7 @@ module.exports = {
         },
         required: ["source", "destination"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const src = path.resolve(params.source);
         const dst = path.resolve(params.destination);
 
@@ -167,13 +168,13 @@ module.exports = {
         fs.renameSync(src, dst);
         return { content: [{ type: "text", text: `Moved ${src} → ${dst}` }] };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "delete_file",
       description:
         "Delete a file or directory. Requires the 'confirm' flag set to true as a safety measure.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           targetPath: {
@@ -187,7 +188,7 @@ module.exports = {
         },
         required: ["targetPath", "confirm"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const target = path.resolve(params.targetPath);
 
         if (!params.confirm) {
@@ -212,12 +213,12 @@ module.exports = {
 
         return { content: [{ type: "text", text: `Deleted: ${target}` }] };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "find_files",
       description: "Find files matching criteria: name pattern, extension, size, or modification time.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           dirPath: {
@@ -239,7 +240,7 @@ module.exports = {
         },
         required: [],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const dir = path.resolve(params.dirPath || ".");
         const args = [JSON.stringify(dir)];
 
@@ -262,12 +263,12 @@ module.exports = {
           return { content: [{ type: "text", text: `Error: ${err.message}` }] };
         }
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "disk_usage",
       description: "Show disk usage for a directory, list largest files, or check free disk space.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           dirPath: {
@@ -285,7 +286,7 @@ module.exports = {
         },
         required: [],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const dir = path.resolve(params.dirPath || ".");
         const parts = [];
 
@@ -306,6 +307,6 @@ module.exports = {
 
         return { content: [{ type: "text", text: parts.join("\n") }] };
       },
-    },
-  ],
+    });
+  },
 };
