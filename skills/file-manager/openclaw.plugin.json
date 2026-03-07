@@ -1,0 +1,12 @@
+{
+  "id": "skill-file-manager",
+  "name": "File Manager",
+  "description": "Manage files and directories — create, copy, move, rename, delete, organize, find, and list.",
+  "version": "1.0.0",
+  "kind": "tool",
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}
