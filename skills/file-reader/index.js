@@ -3,15 +3,16 @@ const path = require("path");
 const { execSync } = require("child_process");
 
 module.exports = {
-  name: "file-reader",
+  id: "skill-file-reader",
+  name: "File Reader",
   description: "Read, preview, and analyze files. Supports text files, code, logs, CSV, JSON, YAML, and more.",
 
-  tools: [
-    {
+  register(api) {
+    api.registerTool({
       name: "read_file",
       description:
         "Read the contents of a file. Can read the full file or a specific line range for large files.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           filePath: {
@@ -29,7 +30,7 @@ module.exports = {
         },
         required: ["filePath"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const { filePath, startLine, endLine } = params;
         const resolved = path.resolve(filePath);
 
@@ -68,13 +69,13 @@ module.exports = {
 
         return { content: [{ type: "text", text: output }] };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "preview_file",
       description:
         "Preview a file: shows the first 30 lines, total line count, file type, size, and permissions.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           filePath: {
@@ -84,7 +85,7 @@ module.exports = {
         },
         required: ["filePath"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const resolved = path.resolve(params.filePath);
 
         if (!fs.existsSync(resolved)) {
@@ -115,14 +116,14 @@ module.exports = {
 
         return { content: [{ type: "text", text: header + "\n" + body + footer }] };
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "search_in_file",
       description:
         "Search for a text pattern (string or regex) inside a file or directory. " +
         "Returns matching lines with line numbers and surrounding context.",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           pattern: {
@@ -144,7 +145,7 @@ module.exports = {
         },
         required: ["pattern", "filePath"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const { pattern, filePath, ignoreCase, contextLines } = params;
         const resolved = path.resolve(filePath);
 
@@ -172,12 +173,12 @@ module.exports = {
           return { content: [{ type: "text", text: `Error running search: ${err.message}` }] };
         }
       },
-    },
+    });
 
-    {
+    api.registerTool({
       name: "compare_files",
       description: "Compare two files and show their differences (unified diff).",
-      inputSchema: {
+      parameters: {
         type: "object",
         properties: {
           fileA: { type: "string", description: "Path to the first file" },
@@ -185,7 +186,7 @@ module.exports = {
         },
         required: ["fileA", "fileB"],
       },
-      async execute(params) {
+      async execute(_id, params) {
         const a = path.resolve(params.fileA);
         const b = path.resolve(params.fileB);
 
@@ -208,6 +209,6 @@ module.exports = {
           return { content: [{ type: "text", text: `Error comparing files: ${err.message}` }] };
         }
       },
-    },
-  ],
+    });
+  },
 };
